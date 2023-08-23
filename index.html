@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Event Registration Form</h2>
+    <form action="" id="form" method="post">
+        <label for="studentName">Student Name:</label>
+        <input type="text" id="studentName" name="studentName" required><br><br>
+        
+        <label for="studentEmail">Student Email:</label>
+        <input type="email" id="studentEmail" name="studentEmail" required><br><br>
+        
+        <label for="studentPhone">Student Phone Number:</label>
+        <input type="tel" id="studentPhone" name="studentPhone" required><br><br>
+        
+        <label for="collegeName">College Name:</label>
+        <input type="text" id="collegeName" name="collegeName" required><br><br>
+        
+        <label>Department:</label><br>
+        <input type="radio" id="cse" name="department" value="CSE" required>
+        <label for="cse">CSE</label><br>
+        <input type="radio" id="ece" name="department" value="ECE">
+        <label for="ece">ECE</label><br>
+        <input type="radio" id="it" name="department" value="IT">
+        <label for="it">IT</label><br>
+        <input type="radio" id="others" name="department" value="Others">
+        <label for="others">Others</label><br><br>
+        
+        <label>Year of Studying:</label><br>
+        <input type="radio" id="firstYear" name="yearOfStudying" value="I Year" required>
+        <label for="firstYear">I Year</label><br>
+        <input type="radio" id="secondYear" name="yearOfStudying" value="II Year">
+        <label for="secondYear">II Year</label><br>
+        <input type="radio" id="thirdYear" name="yearOfStudying" value="III Year">
+        <label for="thirdYear">III Year</label><br>
+        <input type="radio" id="fourthYear" name="yearOfStudying" value="IV Year">
+        <label for="fourthYear">IV Year</label><br><br>
+        
+        <label>Technical Events:</label><br>
+        <input type="checkbox" id="paperPresentation" name="technicalEvents[]" value="Paper Presentation (max 2 members)">
+        <label for="paperPresentation">Paper Presentation (max 2 members)</label><br>
+        <input type="checkbox" id="webDevelopment" name="technicalEvents[]" value="Web Development (max 2 members)">
+        <label for="webDevelopment">Web Development (max 2 members) (Base: Html, Css, Js)</label><br>
+        <input type="checkbox" id="technicalQuiz" name="technicalEvents[]" value="Technical Quiz Master (max 1 member)">
+        <label for="technicalQuiz">Technical Quiz Master (max 1 member)</label><br><br>
+        
+        <label>Non Technical Events:</label><br>
+        <input type="checkbox" id="piconnect" name="nonTechnicalEvents[]" value="piconnect (max 2 members)">
+        <label for="piconnect">piconnect (max 2 members)</label><br>
+        <input type="checkbox" id="crimeSceneAnalyst" name="nonTechnicalEvents[]" value="CrimeScene Analyst (max 2 members)">
+        <label for="crimeSceneAnalyst">CrimeScene Analyst (max 2 members)</label><br>
+        <input type="checkbox" id="clickznow" name="nonTechnicalEvents[]" value="Clickznow">
+        <label for="clickznow">Clickznow</label><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const firebaseConfig = {
+        apiKey: "AIzaSyCwY3ogotwg8p6SakN0MmvrpusFVpcL970",
+        authDomain: "formtest-8e8fc.firebaseapp.com",
+        databaseURL: "https://formtest-8e8fc-default-rtdb.firebaseio.com",
+        projectId: "formtest-8e8fc",
+        storageBucket: "formtest-8e8fc.appspot.com",
+        messagingSenderId: "15994947140",
+        appId: "1:15994947140:web:3e251fc4fe60b4e0bcde11"
+      };
+    firebase.initializeApp(firebaseConfig);
+    var contactFormDB = firebase.database().ref('FormTest');
+    
+    
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const form = document.querySelector('#form');
+        var studentName = document.getElementById("studentName").value;
+        var studentEmail = document.getElementById("studentEmail").value;
+        var studentPhone = document.getElementById("studentPhone").value;
+        var collegeName = document.getElementById("collegeName").value;
+        var department = document.querySelector('input[name="department"]:checked').value;
+        var yearOfStudying = document.querySelector('input[name="yearOfStudying"]:checked').value;
+        
+            var technicalEvents = [];
+            var technicalEventCheckboxes = document.querySelectorAll('input[name="technicalEvents[]"]:checked');
+            technicalEventCheckboxes.forEach(function(checkbox) {
+                technicalEvents.push(checkbox.value);
+            });
+
+            var nonTechnicalEvents = [];
+            var nonTechnicalEventCheckboxes = document.querySelectorAll('input[name="nonTechnicalEvents[]"]:checked');
+            nonTechnicalEventCheckboxes.forEach(function(checkbox) {
+                nonTechnicalEvents.push(checkbox.value);
+            });
+        console.log(studentName,studentEmail,studentPhone,collegeName, department ,yearOfStudying, technicalEvents, nonTechnicalEvents);
+      var newContactForm = contactFormDB.push();
+        newContactForm.set({
+                studentName: studentName,
+                studentEmail: studentEmail,
+                studentPhone: studentPhone,
+                collegeName: collegeName,
+                department: department,
+                yearOfStudying: yearOfStudying,
+                technicalEvents: technicalEvents,
+                nonTechnicalEvents: nonTechnicalEvents
+            });
+    });
+    
+        var el = document.getElementById("wrapper");
+        var toggleButton = document.getElementById("menu-toggle");
+    
+
+      </script>
+
+
+
+
+</body>
+</html>
